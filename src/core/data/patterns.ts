@@ -16,5 +16,13 @@ export const patterns: Pattern[] = [
         description: 'A subscription mechanism to notify multiple objects about any events that happen to the object they\'re observing.',
         difficulty: 'Beginner'
     },
+    {
+        id: '2',
+        slug: 'strategy',
+        name: 'Strategy',
+        type: 'Behavioral',
+        description: 'Define a family of algorithms, encapsulate each one, and make them interchangeable at runtime.',
+        difficulty: 'Beginner'
+    },
     // Future patterns will be added here
 ];
