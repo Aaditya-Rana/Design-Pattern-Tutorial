@@ -1,0 +1,55 @@
+# Builder Pattern
+
+## What is it?
+The **Builder Pattern** separates the construction of a complex object from its representation, allowing the same construction process to create different representations.
+
+## Real-World Analogy
+Think of **Building a Pizza** or **Configuring a Computer**.
+- You add components step by step.
+- Different builders create different variations.
+
+## When to use it?
+- When creating complex objects with many optional parameters.
+- When you want to avoid telescoping constructors.
+- When construction process must allow different representations.
+
+## Code Example
+
+```typescript
+class Pizza {
+  size: string;
+  cheese: boolean;
+  pepperoni: boolean;
+  mushrooms: boolean;
+}
+
+class PizzaBuilder {
+  private pizza = new Pizza();
+  
+  setSize(size: string) {
+    this.pizza.size = size;
+    return this;
+  }
+  
+  addCheese() {
+    this.pizza.cheese = true;
+    return this;
+  }
+  
+  build() {
+    return this.pizza;
+  }
+}
+
+const pizza = new PizzaBuilder()
+  .setSize('large')
+  .addCheese()
+  .build();
+```
+
+## When to Avoid
+- **Simple objects**: If an object has few parameters, a constructor is simpler.
+
+## Common Mistakes
+- **Mutable builders**: Builders should create new objects, not modify existing ones.
+- **Missing validation**: Validate in the `build()` method.
