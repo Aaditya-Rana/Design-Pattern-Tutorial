@@ -1,0 +1,53 @@
+# Observer Pattern
+
+## What is it?
+The **Observer Pattern** is a behavioral design pattern that lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they're observing.
+
+## Real-World Analogy
+Think of a **Newsletter** or a **YouTube Channel**.
+- The **Publisher** (YouTuber) sends out a new video.
+- All **Subscribers** (Users) get a notification.
+- If you unsubscribe, you stop getting notifications.
+- The Publisher doesn't care *who* you are, just that you are in the list.
+
+## When to use it?
+- When changes to the state of one object may require changing other objects, and the actual set of objects is unknown or changes dynamically.
+- When some objects in your app must observe others, but only for a limited time or in specific cases.
+
+## Key Components
+1. **Subject**: The object that is being watched. It holds the state and the list of observers.
+2. **Observer**: The interface that declares the update method.
+3. **Concrete Observer**: Reacts to the update.
+
+## Code Example
+
+```typescript
+interface Observer {
+  update(data: any): void;
+}
+
+class Newsletter implements Subject {
+  private subscribers: Observer[] = [];
+
+  subscribe(o: Observer) {
+    this.subscribers.push(o);
+  }
+
+  unsubscribe(o: Observer) {
+    this.subscribers = this.subscribers.filter(s => s !== o);
+  }
+
+  publishNewIssue(content: string) {
+    this.subscribers.forEach(s => s.update(content));
+  }
+}
+```
+
+## When to Avoid
+- **Overuse**: If there are only a few dependencies, hard-coupling might be simpler and faster.
+- **Performance**: If you have huge numbers of observers, random memory leaks (Lapsed Listener Problem) where observers are not detached can occur.
+
+## Common Mistakes
+- **Memory Leaks**: Forgetting to unsubscribe. The subject holds a reference to the observer, preventing garbage collection.
+- **Update Loops**: Be careful not to trigger a notification that triggers an update that triggers another notification (infinite loop).
+- **Inconsistent State**: notifying observers before the state is actually fully updated.
