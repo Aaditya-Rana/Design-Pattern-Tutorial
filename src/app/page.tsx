@@ -2,14 +2,15 @@
 
 import Link from 'next/link';
 import { patterns } from '@/core/data/patterns';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock, Circle } from 'lucide-react';
 import Header from '@/components/layout/Header';
+import ProgressBar from '@/components/progress/ProgressBar';
 import { useAuth } from '@/hooks/useAuth';
 import { useProgress } from '@/hooks/useProgress';
 
 export default function Home() {
   const { user } = useAuth();
-  const { isCompleted, loading: progressLoading } = useProgress();
+  const { getStatus, loading: progressLoading } = useProgress();
 
   return (
     <>
@@ -42,8 +43,15 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Progress Bar Section */}
+        {user && (
+          <section className="container mx-auto px-4 py-8">
+            <ProgressBar />
+          </section>
+        )}
+
         {/* Pattern Grid */}
-        <section className="container mx-auto px-4 py-20">
+        <section className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-bold text-slate-800">Available Patterns</h2>
             <span className="text-slate-500">{patterns.length} Patterns Ready</span>
@@ -51,16 +59,35 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {patterns.map((pattern) => {
-              const completed = user && !progressLoading && isCompleted(pattern.slug);
+              const status = user && !progressLoading ? getStatus(pattern.slug) : 'not-started';
 
               return (
                 <Link key={pattern.id} href={`/patterns/${pattern.slug}`} className="group">
                   <article className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all h-full flex flex-col relative">
-                    {completed && (
+                    {/* Status Badge */}
+                    {user && (
                       <div className="absolute top-4 right-4">
-                        <CheckCircle2 className="text-green-600" size={24} />
+                        {status === 'completed' && (
+                          <div className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">
+                            <CheckCircle2 size={14} />
+                            Completed
+                          </div>
+                        )}
+                        {status === 'in-progress' && (
+                          <div className="flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold">
+                            <Clock size={14} />
+                            In Progress
+                          </div>
+                        )}
+                        {status === 'not-started' && (
+                          <div className="flex items-center gap-1 bg-slate-100 text-slate-600 px-2 py-1 rounded-full text-xs font-semibold">
+                            <Circle size={14} />
+                            Not Started
+                          </div>
+                        )}
                       </div>
                     )}
+
                     <div className="mb-4">
                       <span
                         className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide

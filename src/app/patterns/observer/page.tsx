@@ -3,7 +3,7 @@
 import ObserverSimulation from '@/core/patterns/observer/presentation/ObserverSimulation';
 import ObserverDocs from '@/content/patterns/observer.mdx';
 import Header from '@/components/layout/Header';
-import MarkCompleteButton from '@/components/patterns/MarkCompleteButton';
+import StatusButton from '@/components/patterns/MarkCompleteButton';
 
 export default function ObserverPage() {
     return (
@@ -17,7 +17,7 @@ export default function ObserverPage() {
                     <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-6">
                         Keep your objects in the loop. The ultimate guide to Publisher-Subscriber relationships.
                     </p>
-                    <MarkCompleteButton patternSlug="observer" />
+                    <StatusButton patternSlug="observer" />
                 </header>
 
                 {/* Simulation Section */}

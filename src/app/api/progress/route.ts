@@ -40,10 +40,14 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
         }
 
-        const { patternSlug } = await request.json();
+        const { patternSlug, status } = await request.json();
 
-        if (!patternSlug) {
-            return NextResponse.json({ error: 'Pattern slug is required' }, { status: 400 });
+        if (!patternSlug || !status) {
+            return NextResponse.json({ error: 'Pattern slug and status are required' }, { status: 400 });
+        }
+
+        if (!['not-started', 'in-progress', 'completed'].includes(status)) {
+            return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
         }
 
         await connectDB();
@@ -54,8 +58,8 @@ export async function POST(request: NextRequest) {
             {
                 userId: payload.userId,
                 patternSlug,
-                completed: true,
-                completedAt: new Date(),
+                status,
+                ...(status === 'completed' ? { completedAt: new Date() } : {}),
             },
             { upsert: true, new: true }
         );

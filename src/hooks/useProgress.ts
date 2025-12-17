@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 interface Progress {
     patternSlug: string;
-    completed: boolean;
+    status: 'not-started' | 'in-progress' | 'completed';
     completedAt?: string;
 }
 
@@ -30,25 +30,33 @@ export function useProgress() {
         }
     };
 
-    const markComplete = async (patternSlug: string) => {
+    const updateStatus = async (patternSlug: string, status: 'not-started' | 'in-progress' | 'completed') => {
         try {
             const res = await fetch('/api/progress', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ patternSlug }),
+                body: JSON.stringify({ patternSlug, status }),
             });
 
             if (res.ok) {
                 await fetchProgress();
             }
         } catch (error) {
-            console.error('Failed to mark complete:', error);
+            console.error('Failed to update status:', error);
         }
     };
 
-    const isCompleted = (slug: string) => {
-        return progress.some((p) => p.patternSlug === slug && p.completed);
+    const getStatus = (slug: string): 'not-started' | 'in-progress' | 'completed' => {
+        const item = progress.find((p) => p.patternSlug === slug);
+        return item?.status || 'not-started';
     };
 
-    return { progress, loading, markComplete, isCompleted, refetch: fetchProgress };
+    const getStats = () => {
+        const completed = progress.filter((p) => p.status === 'completed').length;
+        const inProgress = progress.filter((p) => p.status === 'in-progress').length;
+        const notStarted = 10 - completed - inProgress; // Total 10 patterns
+        return { completed, inProgress, notStarted, total: 10 };
+    };
+
+    return { progress, loading, updateStatus, getStatus, getStats, refetch: fetchProgress };
 }

@@ -3,7 +3,7 @@
 import StrategySimulation from '@/core/patterns/strategy/presentation/StrategySimulation';
 import StrategyDocs from '@/content/patterns/strategy.mdx';
 import Header from '@/components/layout/Header';
-import MarkCompleteButton from '@/components/patterns/MarkCompleteButton';
+import StatusButton from '@/components/patterns/MarkCompleteButton';
 
 export default function StrategyPage() {
     return (
@@ -17,7 +17,7 @@ export default function StrategyPage() {
                     <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-6">
                         Define a family of algorithms, encapsulate each one, and make them interchangeable.
                     </p>
-                    <MarkCompleteButton patternSlug="strategy" />
+                    <StatusButton patternSlug="strategy" />
                 </header>
 
                 {/* Simulation Section */}

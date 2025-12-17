@@ -2,52 +2,67 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useProgress } from '@/hooks/useProgress';
-import { CheckCircle2, Circle } from 'lucide-react';
+import { CheckCircle2, Circle, Clock } from 'lucide-react';
 import { useState } from 'react';
 
-interface MarkCompleteButtonProps {
+interface StatusButtonProps {
     patternSlug: string;
 }
 
-export default function MarkCompleteButton({ patternSlug }: MarkCompleteButtonProps) {
+export default function StatusButton({ patternSlug }: StatusButtonProps) {
     const { user } = useAuth();
-    const { isCompleted, markComplete } = useProgress();
+    const { getStatus, updateStatus } = useProgress();
     const [loading, setLoading] = useState(false);
 
     if (!user) {
         return null;
     }
 
-    const completed = isCompleted(patternSlug);
+    const status = getStatus(patternSlug);
 
-    const handleToggle = async () => {
-        if (completed) return; // Can't uncomplete
-
+    const handleStatusChange = async (newStatus: 'not-started' | 'in-progress' | 'completed') => {
         setLoading(true);
-        await markComplete(patternSlug);
+        await updateStatus(patternSlug, newStatus);
         setLoading(false);
     };
 
     return (
-        <button
-            onClick={handleToggle}
-            disabled={completed || loading}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${completed
-                    ? 'bg-green-100 text-green-700 cursor-default'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white'
-                }`}
-        >
-            {completed ? (
-                <>
-                    <CheckCircle2 size={20} />
-                    Completed!
-                </>
-            ) : (
-                <>
-                    <Circle size={20} />
-                    {loading ? 'Marking...' : 'Mark as Complete'}
-                </>
-            )}
-        </button>
+        <div className="flex items-center gap-2">
+            <button
+                onClick={() => handleStatusChange('not-started')}
+                disabled={loading}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${status === 'not-started'
+                        ? 'bg-slate-200 text-slate-700 ring-2 ring-slate-400'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+            >
+                <Circle size={18} />
+                Not Started
+            </button>
+
+            <button
+                onClick={() => handleStatusChange('in-progress')}
+                disabled={loading}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${status === 'in-progress'
+                        ? 'bg-blue-600 text-white ring-2 ring-blue-400'
+                        : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                    }`}
+            >
+                <Clock size={18} />
+                In Progress
+            </button>
+
+            <button
+                onClick={() => handleStatusChange('completed')}
+                disabled={loading}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${status === 'completed'
+                        ? 'bg-green-600 text-white ring-2 ring-green-400'
+                        : 'bg-green-100 text-green-700 hover:bg-green-200'
+                    }`}
+            >
+                <CheckCircle2 size={18} />
+                Completed
+            </button>
+        </div>
     );
 }

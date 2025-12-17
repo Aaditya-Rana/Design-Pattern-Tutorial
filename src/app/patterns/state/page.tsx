@@ -3,7 +3,7 @@
 import StateSimulation from '@/core/patterns/state/presentation/StateSimulation';
 import StateDocs from '@/content/patterns/state.mdx';
 import Header from '@/components/layout/Header';
-import MarkCompleteButton from '@/components/patterns/MarkCompleteButton';
+import StatusButton from '@/components/patterns/MarkCompleteButton';
 
 export default function StatePage() {
     return (
@@ -17,7 +17,7 @@ export default function StatePage() {
                     <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-6">
                         Allow an object to alter its behavior when its internal state changes.
                     </p>
-                    <MarkCompleteButton patternSlug="state" />
+                    <StatusButton patternSlug="state" />
                 </header>
 
                 <section className="mb-16">
