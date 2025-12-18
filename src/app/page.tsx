@@ -17,25 +17,25 @@ export default function Home() {
       <Header />
       <div className="min-h-screen bg-slate-50">
         {/* Hero */}
-        <section className="bg-slate-900 text-white py-20">
+        <section className="bg-slate-900 text-white py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-5xl font-extrabold mb-6 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 tracking-tight">
               Master Design Patterns
               <span className="block text-blue-500 mt-2">Visually & Interactively</span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-10">
+            <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-10 px-4">
               Stop reading boring tutorials. Experience software design patterns through interactive
               simulations, real-world analogies, and deep insights.
             </p>
             {user && (
-              <div className="bg-blue-600 text-white px-6 py-3 rounded-lg inline-block mb-4">
+              <div className="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg inline-block mb-4 text-sm sm:text-base">
                 Welcome back, {user.name}! Track your progress below.
               </div>
             )}
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
               <Link
                 href="/patterns/observer"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-bold transition-all flex items-center gap-2"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 Start Learning <ArrowRight size={20} />
               </Link>
@@ -51,13 +51,13 @@ export default function Home() {
         )}
 
         {/* Pattern Grid */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-3xl font-bold text-slate-800">Available Patterns</h2>
-            <span className="text-slate-500">{patterns.length} Patterns Ready</span>
+        <section className="container mx-auto px-4 py-8 sm:py-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 gap-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">Available Patterns</h2>
+            <span className="text-sm sm:text-base text-slate-500">{patterns.length} Patterns Ready</span>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {patterns.map((pattern) => {
               const status = user && !progressLoading ? getStatus(pattern.slug) : 'not-started';
 
