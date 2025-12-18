@@ -1,0 +1,51 @@
+# State Pattern
+
+## What is it?
+The **State Pattern** allows an object to alter its behavior when its internal state changes. The object will appear to change its class.
+
+## Real-World Analogy
+Think of a **Document Workflow** (Google Docs, Word).
+- A document can be in **Draft**, **Review**, or **Published** state.
+- Each state has different capabilities (edit, review, publish).
+- Transitions follow specific rules.
+
+## When to use it?
+- When an object's behavior depends on its state and must change at runtime.
+- When you have large conditional statements that depend on object state.
+- When state transitions follow specific rules.
+
+## Code Example
+
+```typescript
+interface State {
+  handle(context: Context): void;
+}
+
+class DraftState implements State {
+  handle(context: Context) {
+    console.log('Editing document...');
+    context.setState(new ReviewState());
+  }
+}
+
+class Context {
+  private state: State;
+  
+  setState(state: State) {
+    this.state = state;
+  }
+  
+  request() {
+    this.state.handle(this);
+  }
+}
+```
+
+## When to Avoid
+- **Simple state logic**: If you only have 2-3 states, a simple flag might suffice.
+- **Frequent state changes**: Can lead to many state objects being created.
+
+## Common Mistakes
+- **God State**: Putting too much logic in one state class.
+- **Tight coupling**: States shouldn't know about all other states.
+- **Missing transitions**: Forgetting to handle all possible state changes.

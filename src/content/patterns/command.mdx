@@ -1,0 +1,51 @@
+# Command Pattern
+
+## What is it?
+The **Command Pattern** encapsulates a request as an object, allowing you to parameterize clients with queues, requests, and operations. It also supports undoable operations.
+
+## Real-World Analogy
+Think of a **Remote Control** or **Text Editor Undo/Redo**.
+- Each button press is a command.
+- Commands can be stored in history.
+- You can undo/redo commands.
+
+## When to use it?
+- When you need undo/redo functionality.
+- When you want to queue or log operations.
+- When you need to parameterize objects with operations.
+
+## Code Example
+
+```typescript
+interface Command {
+  execute(): void;
+  undo(): void;
+}
+
+class PasteCommand implements Command {
+  execute() { /* paste text */ }
+  undo() { /* remove pasted text */ }
+}
+
+class CommandHistory {
+  private history: Command[] = [];
+  
+  execute(cmd: Command) {
+    cmd.execute();
+    this.history.push(cmd);
+  }
+  
+  undo() {
+    const cmd = this.history.pop();
+    cmd?.undo();
+  }
+}
+```
+
+## When to Avoid
+- **Simple operations**: If you don't need undo/redo, it's overkill.
+- **Performance**: Storing command history can use memory.
+
+## Common Mistakes
+- **Not implementing undo properly**: Undo should truly reverse the operation.
+- **Stateless commands**: Commands need to store enough state to undo.

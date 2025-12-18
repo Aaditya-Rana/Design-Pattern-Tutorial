@@ -1,0 +1,48 @@
+# Adapter Pattern
+
+## What is it?
+The **Adapter Pattern** converts the interface of a class into another interface clients expect, allowing incompatible interfaces to work together.
+
+## Real-World Analogy
+Think of a **USB-C to USB-A Adapter** or **Power Plug Adapter**.
+- You have an incompatible interface.
+- The adapter makes it compatible.
+
+## When to use it?
+- When you want to use an existing class with an incompatible interface.
+- When you want to create a reusable class that cooperates with unrelated classes.
+
+## Code Example
+
+```typescript
+// Old interface
+class OldPrinter {
+  printOldWay(text: string) {
+    console.log(`Old: ${text}`);
+  }
+}
+
+// New interface
+interface ModernPrinter {
+  print(text: string): void;
+}
+
+// Adapter
+class PrinterAdapter implements ModernPrinter {
+  constructor(private oldPrinter: OldPrinter) {}
+  
+  print(text: string) {
+    this.oldPrinter.printOldWay(text);
+  }
+}
+
+const adapter = new PrinterAdapter(new OldPrinter());
+adapter.print('Hello'); // Works with new interface
+```
+
+## When to Avoid
+- **Simple conversions**: If you can just modify the original class.
+
+## Common Mistakes
+- **Two-way adapters**: Adapters should be one-way.
+- **Too much logic**: Adapters should just translate, not add behavior.

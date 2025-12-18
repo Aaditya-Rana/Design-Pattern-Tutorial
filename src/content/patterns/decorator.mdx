@@ -1,0 +1,45 @@
+# Decorator Pattern
+
+## What is it?
+The **Decorator Pattern** attaches additional responsibilities to an object dynamically, providing a flexible alternative to subclassing.
+
+## Real-World Analogy
+Think of **Coffee with Add-ons** or **Text Formatting**.
+- Start with a base (coffee, plain text).
+- Add decorators (milk, sugar, bold, italic).
+
+## When to use it?
+- When you want to add responsibilities to objects dynamically.
+- When extension by subclassing is impractical.
+
+## Code Example
+
+```typescript
+interface Coffee {
+  cost(): number;
+  description(): string;
+}
+
+class SimpleCoffee implements Coffee {
+  cost() { return 5; }
+  description() { return 'Simple coffee'; }
+}
+
+class MilkDecorator implements Coffee {
+  constructor(private coffee: Coffee) {}
+  
+  cost() { return this.coffee.cost() + 2; }
+  description() { return this.coffee.description() + ', milk'; }
+}
+
+let coffee = new SimpleCoffee();
+coffee = new MilkDecorator(coffee);
+console.log(coffee.cost()); // 7
+```
+
+## When to Avoid
+- **Too many decorators**: Can lead to complexity.
+
+## Common Mistakes
+- **Order dependency**: Decorators shouldn't depend on order.
+- **Breaking interface**: Decorators must implement the same interface.

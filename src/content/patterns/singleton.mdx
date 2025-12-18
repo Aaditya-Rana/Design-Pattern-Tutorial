@@ -1,0 +1,45 @@
+# Singleton Pattern
+
+## What is it?
+The **Singleton Pattern** ensures a class has only one instance and provides a global access point to it.
+
+## Real-World Analogy
+Think of a **Database Connection Pool** or **Application Configuration**.
+- Only one instance should exist.
+- Everyone accesses the same instance.
+
+## When to use it?
+- When exactly one instance of a class is needed.
+- When you need global access to that instance.
+- For managing shared resources (DB connections, caches).
+
+## Code Example
+
+```typescript
+class Database {
+  private static instance: Database;
+  
+  private constructor() {
+    // Private constructor prevents direct instantiation
+  }
+  
+  static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
+    }
+    return Database.instance;
+  }
+}
+
+const db1 = Database.getInstance();
+const db2 = Database.getInstance();
+console.log(db1 === db2); // true
+```
+
+## When to Avoid
+- **Testing**: Singletons make unit testing harder.
+- **Global state**: Can lead to hidden dependencies.
+
+## Common Mistakes
+- **Thread safety**: In multi-threaded environments, need proper locking.
+- **Overuse**: Not everything should be a singleton.

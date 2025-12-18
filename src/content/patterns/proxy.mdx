@@ -1,0 +1,60 @@
+# Proxy Pattern
+
+## What is it?
+The **Proxy Pattern** provides a surrogate or placeholder for another object to control access to it.
+
+## Real-World Analogy
+Think of **Lazy Loading Images** or **Access Control**.
+- The proxy controls when the real object is created/accessed.
+- Can add caching, logging, access control.
+
+## When to use it?
+- **Virtual Proxy**: Delay expensive object creation.
+- **Protection Proxy**: Control access to an object.
+- **Remote Proxy**: Represent an object in a different address space.
+
+## Code Example
+
+```typescript
+interface Image {
+  display(): void;
+}
+
+class RealImage implements Image {
+  constructor(private filename: string) {
+    this.loadFromDisk();
+  }
+  
+  loadFromDisk() {
+    console.log(`Loading ${this.filename}`);
+  }
+  
+  display() {
+    console.log(`Displaying ${this.filename}`);
+  }
+}
+
+class ProxyImage implements Image {
+  private realImage: RealImage | null = null;
+  
+  constructor(private filename: string) {}
+  
+  display() {
+    if (!this.realImage) {
+      this.realImage = new RealImage(this.filename);
+    }
+    this.realImage.display();
+  }
+}
+
+const image = new ProxyImage('photo.jpg');
+// Image not loaded yet
+image.display(); // Now it loads
+```
+
+## When to Avoid
+- **Simple access**: If you don't need access control or lazy loading.
+
+## Common Mistakes
+- **Forgetting to delegate**: Proxy must eventually call the real object.
+- **Overcomplicating**: Don't add proxy if not needed.

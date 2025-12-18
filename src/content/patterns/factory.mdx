@@ -1,0 +1,50 @@
+# Factory Method Pattern
+
+## What is it?
+The **Factory Method Pattern** defines an interface for creating objects, but lets subclasses decide which class to instantiate.
+
+## Real-World Analogy
+Think of a **UI Component Library**.
+- You have a factory that creates Buttons, Cards, Modals.
+- The factory decides which specific implementation to create based on the platform (Web, Mobile).
+
+## When to use it?
+- When a class can't anticipate the type of objects it needs to create.
+- When you want to delegate instantiation to subclasses.
+- When you want to provide a library of products.
+
+## Code Example
+
+```typescript
+interface Button {
+  render(): void;
+}
+
+class WebButton implements Button {
+  render() { console.log('Web button'); }
+}
+
+class MobileButton implements Button {
+  render() { console.log('Mobile button'); }
+}
+
+abstract class Dialog {
+  abstract createButton(): Button;
+  
+  render() {
+    const button = this.createButton();
+    button.render();
+  }
+}
+
+class WebDialog extends Dialog {
+  createButton() { return new WebButton(); }
+}
+```
+
+## When to Avoid
+- **Simple object creation**: If you only have one type, just use `new`.
+
+## Common Mistakes
+- **Overuse**: Not every object creation needs a factory.
+- **God factory**: One factory creating too many unrelated types.

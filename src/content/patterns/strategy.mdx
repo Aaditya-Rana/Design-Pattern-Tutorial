@@ -1,0 +1,68 @@
+# Strategy Pattern
+
+## What is it?
+The **Strategy Pattern** is a behavioral design pattern that lets you define a family of algorithms, put each of them into a separate class, and make their objects interchangeable.
+
+## Real-World Analogy
+Think of **Navigation Apps** (Google Maps, Waze).
+- You want to get from A to B.
+- The app offers different **strategies**: Fastest Route, Shortest Route, Avoid Tolls.
+- You can **switch strategies** at runtime without changing the navigation system itself.
+
+## When to use it?
+- When you have multiple ways to perform an operation and want to switch between them dynamically.
+- When you want to avoid complex conditional statements (if/else chains).
+- When algorithms should be independent of the clients that use them.
+
+## Key Components
+1. **Strategy Interface**: Declares the algorithm interface.
+2. **Concrete Strategies**: Implement different variations of the algorithm.
+3. **Context**: Maintains a reference to a Strategy object and delegates the algorithm execution.
+
+## Code Example
+
+```typescript
+interface SortStrategy {
+  sort(arr: number[]): number[];
+}
+
+class BubbleSort implements SortStrategy {
+  sort(arr: number[]): number[] {
+    // Bubble sort implementation
+    return arr;
+  }
+}
+
+class QuickSort implements SortStrategy {
+  sort(arr: number[]): number[] {
+    // Quick sort implementation
+    return arr;
+  }
+}
+
+class SortContext {
+  private strategy: SortStrategy;
+
+  setStrategy(strategy: SortStrategy) {
+    this.strategy = strategy;
+  }
+
+  executeSort(arr: number[]) {
+    return this.strategy.sort(arr);
+  }
+}
+
+// Usage
+const context = new SortContext();
+context.setStrategy(new QuickSort());
+const sorted = context.executeSort([5, 2, 8, 1]);
+```
+
+## When to Avoid
+- **Simple cases**: If you only have one or two algorithms, the pattern adds unnecessary complexity.
+- **Performance-critical code**: The indirection can add slight overhead.
+
+## Common Mistakes
+- **Too many strategies**: Creating a strategy for every tiny variation leads to class explosion.
+- **Forgetting the context**: Strategies should be stateless; state belongs in the context.
+- **Not using composition**: Hardcoding strategy selection defeats the purpose.
