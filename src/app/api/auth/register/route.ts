@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import { User } from '@/lib/models/User';
-import { hashPassword, generateToken } from '@/lib/auth/utils';
+import { hashPassword } from '@/lib/auth/utils';
 
 export async function POST(request: NextRequest) {
     try {
@@ -38,15 +38,10 @@ export async function POST(request: NextRequest) {
             name,
         });
 
-        // Generate token
-        const token = generateToken({
-            userId: user._id.toString(),
-            email: user.email,
-        });
-
-        // Set cookie
-        const response = NextResponse.json(
+        // Return success without setting auth token
+        return NextResponse.json(
             {
+                message: 'Account created successfully. Please login.',
                 user: {
                     id: user._id,
                     email: user.email,
@@ -55,17 +50,9 @@ export async function POST(request: NextRequest) {
             },
             { status: 201 }
         );
-
-        response.cookies.set('auth-token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7, // 7 days
-        });
-
-        return response;
     } catch (error) {
         console.error('Registration error:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
+

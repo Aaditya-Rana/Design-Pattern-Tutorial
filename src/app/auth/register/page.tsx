@@ -24,13 +24,14 @@ export default function RegisterPage() {
                 body: JSON.stringify({ name, email, password }),
             });
 
+            const data = await res.json();
+
             if (!res.ok) {
-                const data = await res.json();
                 throw new Error(data.error || 'Registration failed');
             }
 
-            router.push('/');
-            router.refresh();
+            // Redirect to login page after successful registration
+            router.push('/auth/login?registered=true');
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Registration failed');
         } finally {
